@@ -1,4 +1,3 @@
-# .CITY Starter Kit
 
 Live video API with [www.flowchain.co](http://www.flowchain.co).
 
