@@ -19,11 +19,17 @@ var app = app || {};
 **/
 app.ContainerView = Backbone.View.extend({
     el: '#video',
+    width: 640,
+    height: 320,
     initialize: function() {
     },
     render: function(name) {
+	canvas.width = this.width;
+	canvas.height = this.height;
+
         // Show loading notice
         var ctx = canvas.getContext('2d');
+
         ctx.fillStyle = '#444';
         ctx.fillText('Waiting...', canvas.width/2-30, canvas.height/3);
 
@@ -33,6 +39,11 @@ app.ContainerView = Backbone.View.extend({
     },
     syncUp: function(name) {
         this.render(name);
+    },
+    setWidthHeight: function(w, h) {
+	this.width = w;
+	this.height = h;
+	console.log('set width =', w, 'height =', h);
     }
 });
 
@@ -41,10 +52,16 @@ app.ContainerView = Backbone.View.extend({
  */
 app.AppRoutes = Backbone.Router.extend({
     routes: {
-        ":name": "appByName"
+        ":name": "appByName",
+	":name/:width/:height": "appByNameWithWidthHeight"
     },
     appByName: function(name) {
         app.containerView = new app.ContainerView();
+        app.containerView.syncUp(name);
+    },
+    appByNameWithWidthHeight: function(name, w, h) {
+        app.containerView = new app.ContainerView();
+        app.containerView.setWidthHeight(w, h);
         app.containerView.syncUp(name);
     }
 });
